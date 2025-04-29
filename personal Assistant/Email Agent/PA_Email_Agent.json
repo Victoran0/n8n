@@ -1,0 +1,201 @@
+{
+  "name": "PA Email Agent",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "jsonExample",
+        "jsonExample": "{\n  \"query\": \"The user's request, including the email address to act on\"\n}"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "d220a5ea-138c-4af5-9ec4-43950c6c81b0",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.query }}",
+        "options": {
+          "systemMessage": "=You are Victor, a proactive and detail-oriented virtual assistant specialized in managing Gmail communications. Your tone is professional, courteous, and concise. You take direct action on emails (e.g., drafting, replying, organizing, scheduling) while adhering to strict guidelines. Your job is to extract the receiver's email from the request, also find a suitable name for the subject and decide what the body will be with respect to the content of the prompt.\nWhen asked to retrieve the content of a past email, your response should contain details regarding the set of emails that meet the user's request.\nIf the user's prompt is about getting/retrieving an email and it contains keywords like \"most recent email\"/\"last email\" or the limit is not specified, set it to 2.\n\nRules:\n\nIdentity: Always sign off as \"Victor\"—never use placeholders like \"[Name]\" or \"[Your Title]\".\n\nOwnership: Use first-person pronouns (e.g., \"I’ve scheduled the meeting,\" \"I’ll follow up\").\n\nClarity: Keep responses brief, actionable, and free of jargon."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.8,
+      "position": [
+        220,
+        0
+      ],
+      "id": "691c7137-7672-4f08-a945-293a0becaba8",
+      "name": "Email Agent"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $fromAI(\"emailAddress\", \"the email address we are sending to\") }}",
+        "subject": "={{ $fromAI(\"subject\") }}",
+        "emailType": "text",
+        "message": "={{ $fromAI(\"emailBody\") }}",
+        "options": {
+          "appendAttribution": false,
+          "senderName": "Rano Personal Assistant"
+        }
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.1,
+      "position": [
+        320,
+        220
+      ],
+      "id": "885d7218-5d60-4575-a0fb-a43fb3af55a7",
+      "name": "Send Mail",
+      "webhookId": "5d6310a0-8205-4d41-9879-f8316e17429b",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "2OPP8KgNYMScRbmC",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash-lite-001",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        140,
+        200
+      ],
+      "id": "ab7cb743-787a-4487-8469-df2357715c4c",
+      "name": "LLM",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "A5i26b8hwDUBhzbe",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f00a03d9-849f-4068-b317-28d61b952224",
+              "name": "Response",
+              "value": "={{ $json.output }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        580,
+        0
+      ],
+      "id": "d72f4931-9e72-4ee4-9c78-c2b6e7d01318",
+      "name": "Response"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "limit": "={{ $fromAI(\"limit\") }}",
+        "simple": false,
+        "filters": {
+          "sender": "={{ $fromAI(\"senderEmail\") }}"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.1,
+      "position": [
+        500,
+        200
+      ],
+      "id": "3375c82d-62e5-41bd-8967-2ee4ae9b7092",
+      "name": "Get Email",
+      "webhookId": "839d7c86-d773-44f4-9919-a2ae909bcd63",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "2OPP8KgNYMScRbmC",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Email Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Mail": {
+      "ai_tool": [
+        [
+          {
+            "node": "Email Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LLM": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Email Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email Agent": {
+      "main": [
+        [
+          {
+            "node": "Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Email": {
+      "ai_tool": [
+        [
+          {
+            "node": "Email Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "5b2f0af9-37b8-4080-8057-c32a4ac193ca",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e15e295de39124dfa3dae9c7582f0d6f1394ebc90aa823a78d70f84a8c0c54c5"
+  },
+  "id": "e11tCqp5jmOeqphV",
+  "tags": []
+}

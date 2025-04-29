@@ -1,0 +1,214 @@
+{
+  "name": "PA Research Agent",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "jsonExample",
+        "jsonExample": "{\n  \"query\": \"the search query\"\n}"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "8f647d56-ba63-476d-865a-61f29ce58c7d",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.query }}",
+        "options": {
+          "systemMessage": "=You are a research assistant agent. You have the following tools; Wikipedia, Hacker News API, and Serp API at your disposal.\nTo answer the user's question, first search wikipedia. If you can't find any data related to the answer there, then search articles using Hacker News API.\nIf that doesn't provide any related information either, then use Serp API to answer the user's question.\nStrictly follow the workflow stated above, you are to first search using the wikipedia tool, and only if you can't find any related information should you then proceed to use the hacker News API and after this, if you still can not find any related information, you can then use the Serp API.\nYou must analyze the result of each tool intensively, and carefully check if you can find an answer to the user's question in it before you try to call another tool, this is to optimize the process and save costs on multiple API calls, while you remain smart and very professional at what you do.\nThe present Date/Time is {{ $now.format('yyyy-MM-dd ttt') }}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.8,
+      "position": [
+        220,
+        0
+      ],
+      "id": "04079551-f9df-4baa-93cc-418c8a6d630d",
+      "name": "Research Agent"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.toolWikipedia",
+      "typeVersion": 1,
+      "position": [
+        240,
+        200
+      ],
+      "id": "6b827d46-1a9e-416f-b5f9-f417ad3e286c",
+      "name": "Wikipedia"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash-001",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        120,
+        220
+      ],
+      "id": "c0f65b26-bad4-49b6-8276-211ff9f36d62",
+      "name": "LLM",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "A5i26b8hwDUBhzbe",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "405c3a68-df33-48ee-92dc-595950765932",
+              "name": "response",
+              "value": "={{ $json.output }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        580,
+        0
+      ],
+      "id": "f0794f3e-6adb-4fc9-9397-9267d314e103",
+      "name": "Response"
+    },
+    {
+      "parameters": {
+        "resource": "all",
+        "limit": "={{ $fromAI(\"limit\") }}",
+        "additionalFields": {
+          "keyword": "={{ $fromAI(\"keyword\", \"relevant keywords for the search\") }}"
+        }
+      },
+      "type": "n8n-nodes-base.hackerNewsTool",
+      "typeVersion": 1,
+      "position": [
+        360,
+        200
+      ],
+      "id": "03d5d5d3-8349-48e1-a02d-4a515c9a7743",
+      "name": "Hacker News"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolSerpApi",
+      "typeVersion": 1,
+      "position": [
+        480,
+        160
+      ],
+      "id": "9890dcc2-35e7-4cb0-8230-45a0014fab32",
+      "name": "Serp API",
+      "credentials": {
+        "serpApi": {
+          "id": "GraCkVOCSrU9nozL",
+          "name": "SerpAPI account"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "query": "what is barrack obama date of birth"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Research Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wikipedia": {
+      "ai_tool": [
+        [
+          {
+            "node": "Research Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LLM": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Research Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Research Agent": {
+      "main": [
+        [
+          {
+            "node": "Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Hacker News": {
+      "ai_tool": [
+        [
+          {
+            "node": "Research Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Serp API": {
+      "ai_tool": [
+        [
+          {
+            "node": "Research Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "0f3b36e3-cee9-4f60-9443-2c1b207242e7",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e15e295de39124dfa3dae9c7582f0d6f1394ebc90aa823a78d70f84a8c0c54c5"
+  },
+  "id": "1iSJlzXlB2uvw9Md",
+  "tags": []
+}

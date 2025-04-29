@@ -1,0 +1,759 @@
+{
+  "name": "Personal Assistant",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -380,
+        -80
+      ],
+      "id": "1e7c9eb1-04a4-4800-91c5-305c14bd80bc",
+      "name": "Telegram Trigger",
+      "webhookId": "8c8ef3b4-bd16-40da-9cc8-fd3f694dbb5e",
+      "credentials": {
+        "telegramApi": {
+          "id": "7xiDupNSurLMRv0w",
+          "name": "victorano_assistant_bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash-001",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        180,
+        140
+      ],
+      "id": "decde9c7-4d67-4de7-b85b-6b1e25bd8544",
+      "name": "LLM",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "A5i26b8hwDUBhzbe",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Telegram Trigger').item.json.message.chat.id }}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        280,
+        140
+      ],
+      "id": "5e06197f-b27c-42f3-a3ec-9c3fb5ebbaf0",
+      "name": "Memory"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1_thTx-hbP0E_EbbetNJaE79mV6Q3SOIM4uvZHL6Bmis",
+          "mode": "list",
+          "cachedResultName": "Random contacts",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1_thTx-hbP0E_EbbetNJaE79mV6Q3SOIM4uvZHL6Bmis/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1_thTx-hbP0E_EbbetNJaE79mV6Q3SOIM4uvZHL6Bmis/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.5,
+      "position": [
+        360,
+        220
+      ],
+      "id": "cdef5ea0-adae-460a-86ff-3993ba0985a8",
+      "name": "Contact Database",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Jw90fVh4qDNGooIr",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "={{ $json.output }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        760,
+        -320
+      ],
+      "id": "7dafb7a6-be13-4cbd-9672-1e873fb3b3be",
+      "name": "Telegram",
+      "webhookId": "8fee852a-389a-478b-9393-d5f0e88686b8",
+      "credentials": {
+        "telegramApi": {
+          "id": "7xiDupNSurLMRv0w",
+          "name": "victorano_assistant_bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.text }}",
+        "options": {
+          "systemMessage": "=You are a highly efficient and detail-oriented personal assistant AI designed to manage communication and scheduling tasks seamlessly. You have access to the following tools: Contact Database, EmailAgent, and CalendarAgent. Your priority is to use these tools In the correct sequence to ensure accuracy and reliability.\nTask Specification\nYour task is to handle requests involving emails and scheduling by:\n1. Accessing the \"Contact Database\" to retrieve accurate contact details (e.g, email address) of the requested person.\n2. Using \"EmailAgent\" for email-related actions, only after obtaining the required contact information.\n3. Using \"CalendarAgent\" for getting calander events and scheduling tasks, only after confirming contact details through the Contact Database (if contact is included).\nIf contact details cannot be found, notify the user and do not proceed with EmailAgent or CalendarAgent until accurate information is provided.\n\nTools overview and usage guideline\n1. Contact Database\nDescription:\nThe Contact Database is a tool used to retrieve a person's contact information, such as email before proceeding\nwith any email or calendar action.\nWhen to Use:\n- before using EmailAgent: To ensure the correct emai address is retrieved for sending an email.\n- before using CalerdarAgent: To confirm contact details of participants for scheduling events.\nKey Notes:\n- Always query the Contact Database first.\n- If the contact is not found, do not proceed with EmailAgent or CalendarAgent. Notify the user instead. \n\n2. Emai1Agent\nDescription:\nThe is a tool used to compose, send or manage emails.\nWhen to Use:\n- \"After retrieving contact Information\": use this tool only after confirming the address from the Contact Database.\n- For tasks such as: Sending an email, Getting emails, responding to an email, forwarding an email.\nKey Notes:\n- Ensure the content is professional and free of placeholders.\n- Double-check that the correct contact information is used. \n\n3. CalendarAgent\nDescription:\nThe CalendarAgent tool is a used to schedule, Update, Get or cancel events in a calendar system.\nWhen to Use:\n- \"If a contact is involved, use only After retrieving contact information: use this tool only after the email address or relevant details is verified from the contact Database.\n- For tasks such as:\n- Schedullng a meeting or appointment\n- Updating the time or date of an existing event.\n- Canceling an event and notifying the participants.\nKey Notes:\n- Confirm all details (e.g.. time, date, participants) before creating or modifying events.\n- Always ensure participants' contact informtion and event details are accurate to avoid errors in event management.\nHere is the current Date/Time {{$now.format('yyyy-MM-dd tttt')}}\n\nSpecifics and Context\nThis workflow ensures efficient task execution while eliminating errors from incorrect or missing contact Information. Always prioritize verifying contact details via the Contact Database to maintaln professionalism and precision in communication and scheduling tasks.\n\nExample 1: Sending an Email\nInput: \"Send an email to Sarah Connor asking her if we can reschedule our meeting to next week.\n\nProcess:\n1. Query the Contact Database for \"Sarah Connor\".\n- Result: Email address is sarah.connor@example.com\n2. use EmailAgent to the email:\nEmail Content:\nHi Sarah,\nCan reschedule our meeting to next week.\n\nBest regards,\nNate\n\nOutput: \"Email sent to sarah.connor@example.com successfully.\"\n\nExample 2: Sending an Email\nInput: \"Send an email to Mike Connor asking her if we can talk today.\n\nProcess:\n1. Query the Contact Database for \"Mike Connor\".\n- Result: Contact not found\n\nOutput: \"I couldn't find contact information for Mike Connor, please provide the correct details or verify in the database\"\n\nExample 3: Scheduling a Meeting\nInput: \"Schedule a meeting with David Brown on Thursday at 2PM.\"\n\n\"Process :\n1. Query Contact Database for \"David Brown\"\n- Result: Emil address is david.brown@example.com.\n2. use CalendarAgent to schedule the meeting:\n••Event Details:••\n- Participant: David Brown\n- Time: Thursday, 2 PM\n- Notes: Scheduled by Nate\n\nOutput: \"Meeting with David Brown has been scheduled for Thursday at 2 PM\".\n\nReminders\n- Always use the Contact Database first to retrieve contact information before using EmailAgent or CalendarAgent\n- If contact details are unavailable. notify the user and pause further actions.\n- Ensure all emails and events are clear, professional, and include correct information.\n- If a contact is involved, Do not proceed with any task unless the required contact information has been verified.\nHere is the current Date/Time {{$now.format('yyyy-MM-dd tttt')}}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.8,
+      "position": [
+        380,
+        -80
+      ],
+      "id": "36544a81-29b1-4ba7-8f5a-2a01bc11a76c",
+      "name": "PA Agent"
+    },
+    {
+      "parameters": {
+        "name": "EmailAgent",
+        "description": "Call this tool to access email services, with it you can send and get emails. The input should be in the JSON format {\"query\": \"the user's request, including the email to act on\"}",
+        "workflowId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "e11tCqp5jmOeqphV",
+          "cachedResultName": "PA Email Agent"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "query",
+              "displayName": "query",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.1,
+      "position": [
+        480,
+        140
+      ],
+      "id": "e6e56f16-e470-4895-abdb-ebee963dedb7",
+      "name": "Email Agent"
+    },
+    {
+      "parameters": {
+        "name": "CalendarAgent",
+        "description": "Call this tool to take action in calendar. The input should be in the JSON format {\"request\": \"the request, including attendees' email (if any)\"}",
+        "workflowId": {
+          "__rl": true,
+          "value": "7ST0HIPkOjEWXNIO",
+          "mode": "list",
+          "cachedResultName": "PA Calendar Agent"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "request": "={{ $fromAI(\"request\") }}"
+          },
+          "matchingColumns": [
+            "request"
+          ],
+          "schema": [
+            {
+              "id": "request",
+              "displayName": "request",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.1,
+      "position": [
+        540,
+        240
+      ],
+      "id": "c74deb30-833c-4272-8d0c-bcd0a2004e47",
+      "name": "Calendar Agent"
+    },
+    {
+      "parameters": {
+        "name": "ResearchAgent",
+        "description": "Call this tool to search the internet to answer the user's question",
+        "workflowId": {
+          "__rl": true,
+          "value": "1iSJlzXlB2uvw9Md",
+          "mode": "list",
+          "cachedResultName": "PA Research Agent"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "query": "={{ $fromAI(\"query\", \"the search query\") }}"
+          },
+          "matchingColumns": [
+            "query"
+          ],
+          "schema": [
+            {
+              "id": "query",
+              "displayName": "query",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.1,
+      "position": [
+        620,
+        120
+      ],
+      "id": "e391e67f-3358-441e-8bfb-ab275f0a2540",
+      "name": "Research Agent"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.message.voice.file_id }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    },
+                    "id": "cc4fb967-5ea3-4a8c-8114-dde1942fca45"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "voice"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "b99f7542-2340-4df0-acfb-799b36e9ba6e",
+                    "leftValue": "={{ $json.message.text }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "text"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -200,
+        -80
+      ],
+      "id": "da3ae0a8-6127-4492-b81a-dc28249628aa",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "632f5387-b666-4023-a1ff-8a7d7350e072",
+              "name": "text",
+              "value": "={{ $json.message.text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        60,
+        20
+      ],
+      "id": "7f60f08f-b314-4642-a4f0-bb22c6541f15",
+      "name": "Set Text"
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "fileId": "={{ $json.message.voice.file_id }}"
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -20,
+        -200
+      ],
+      "id": "de74601b-fb29-4286-80d2-9b394efb793d",
+      "name": "Download VN",
+      "webhookId": "4bf96e83-680b-4501-b7cb-acebfe251d78",
+      "alwaysOutputData": false,
+      "credentials": {
+        "telegramApi": {
+          "id": "7xiDupNSurLMRv0w",
+          "name": "victorano_assistant_bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainSummarization",
+      "typeVersion": 2,
+      "position": [
+        800,
+        -160
+      ],
+      "id": "5fda8a96-1ae0-4a08-87ae-38a7ea75e56f",
+      "name": "Summarization Chain"
+    },
+    {
+      "parameters": {
+        "resource": "audio",
+        "operation": "transcribe",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        160,
+        -200
+      ],
+      "id": "6087661b-a67d-473e-aca3-bd1e2b812acf",
+      "name": "Transcribe Recording",
+      "credentials": {
+        "openAiApi": {
+          "id": "cZ9ml2aiQiMPzKMs",
+          "name": "OpenAi account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash-lite-001",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        860,
+        -20
+      ],
+      "id": "57c4c03e-ca04-4efe-8446-c264c2835ae5",
+      "name": "LLM1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "A5i26b8hwDUBhzbe",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "sendAudio",
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "binaryData": true,
+        "additionalFields": {
+          "fileName": "data.mpeg"
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1320,
+        -140
+      ],
+      "id": "3174a178-df96-4316-85c7-6c92d8b209c8",
+      "name": "Send Audio",
+      "webhookId": "eb7b587b-e75a-4bb0-badb-ce7657b5d2ff",
+      "credentials": {
+        "telegramApi": {
+          "id": "7xiDupNSurLMRv0w",
+          "name": "victorano_assistant_bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.deepgram.com/v1/speak",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Token xxx"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "text",
+              "value": "={{ $json.response.text }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1120,
+        -140
+      ],
+      "id": "7aa87c02-d7bc-4bb8-b087-f34e0aaca1f1",
+      "name": "Summary to Speech"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        800,
+        260
+      ],
+      "id": "2a0598ce-f7fe-4efc-848e-0b4a66d5a901",
+      "name": "Embeddings Google Gemini",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "A5i26b8hwDUBhzbe",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "pineconeIndex": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStorePinecone",
+      "typeVersion": 1.1,
+      "position": [
+        740,
+        140
+      ],
+      "id": "c653cb3a-9b77-46d4-8984-32b5d7bf26f3",
+      "name": "Projects Vector Store",
+      "credentials": {
+        "pineconeApi": {
+          "id": "hFPzj7CYakqXz1iO",
+          "name": "PineconeApi account"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "Projects Vector Store": [
+      {
+        "json": {
+          "name": "First item",
+          "code": 1
+        }
+      },
+      {
+        "json": {
+          "name": "Second item",
+          "code": 2
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LLM": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "PA Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "PA Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Contact Database": {
+      "ai_tool": [
+        [
+          {
+            "node": "PA Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PA Agent": {
+      "main": [
+        [
+          {
+            "node": "Telegram",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Summarization Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email Agent": {
+      "ai_tool": [
+        [
+          {
+            "node": "PA Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calendar Agent": {
+      "ai_tool": [
+        [
+          {
+            "node": "PA Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Research Agent": {
+      "ai_tool": [
+        [
+          {
+            "node": "PA Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Download VN",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Set Text",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Text": {
+      "main": [
+        [
+          {
+            "node": "PA Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download VN": {
+      "main": [
+        [
+          {
+            "node": "Transcribe Recording",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Summarization Chain": {
+      "main": [
+        [
+          {
+            "node": "Summary to Speech",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transcribe Recording": {
+      "main": [
+        [
+          {
+            "node": "PA Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LLM1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Summarization Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Summary to Speech": {
+      "main": [
+        [
+          {
+            "node": "Send Audio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Google Gemini": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Projects Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Projects Vector Store": {
+      "ai_tool": [
+        [
+          {
+            "node": "PA Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "f962a2bb-498e-4068-9ba6-e76e10f5de94",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e15e295de39124dfa3dae9c7582f0d6f1394ebc90aa823a78d70f84a8c0c54c5"
+  },
+  "id": "lx8AC3vfdS8mY5JF",
+  "tags": []
+}

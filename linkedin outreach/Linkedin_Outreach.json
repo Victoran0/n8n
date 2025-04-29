@@ -1,0 +1,796 @@
+{
+  "name": "Linkedin Outreach",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "LinkedIn Lead Outreach Trigger",
+        "formDescription": "Insert an audience for your LinkedIn Outreach Campaign",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Describe your audience in plain English",
+              "fieldType": "textarea",
+              "placeholder": "Company type, location, etc",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "33abf04c-3b41-4b15-888d-80f6f192ae6e",
+      "name": "On form submission",
+      "webhookId": "459f7ec0-a861-4ee7-a094-29ec90263184"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        260,
+        160
+      ],
+      "id": "969f9617-3ab6-4149-9b71-8b715a678028",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "A5i26b8hwDUBhzbe",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n\t\"type\": \"object\",\n\t\"properties\": {\n\t\t\"searchUrl\": {\n\t\t\t\"type\": \"string\"\n\t\t}\n\t}\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.2,
+      "position": [
+        420,
+        160
+      ],
+      "id": "c263a6f9-15a0-4fc2-ad82-6a881f650a18",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.apify.com/v2/acts/jljBwyyQakqrL1wae/run-sync-get-dataset-items",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer xxx"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"getPersonalEmails\": true,\n  \"getWorkEmails\": true,\n  \"url\": \"{{ $json.output.searchUrl }}\",\n  \"totalRecords\": 500\n} ",
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        620,
+        0
+      ],
+      "id": "82cfd653-9a1e-480a-b10e-8e27f3d4dcde",
+      "name": "Run APIFY actor and Get Result"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json['Describe your audience in plain English'] }}",
+        "hasOutputParser": true,
+        "messages": {
+          "messageValues": [
+            {
+              "message": "You are a helpful intelligent Sales Assistant. "
+            },
+            {
+              "type": "HumanMessagePromptTemplate",
+              "message": "Your task is to take as input a natural language description of a prospect audience, and turn that into an Apollo Search URL. \nHere is an example of an Apollo Search URL: https://app.apollo.io/#/people?page=1&sortAscending=false&sortByField=recommendations_score&personTitles[]=professor&personLocations[]=France&qOrganizationKeywordTags[]=theoretical%20physics&includedOrganizationKeywordFields[]=tags&includedOrganizationKeywordFields[]=name  \nThe URL above describes a search for people that are located in  \"France\", Hold the job title \"Professor\" and have a keyword associated with \"Theoretical Physics\". You are only allowed to change the location, job title and keyword fields.\nReturn your response in JSON format: {\"searchUrl\", \"searchUrl goes here\"}"
+            }
+          ]
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.6,
+      "position": [
+        260,
+        0
+      ],
+      "id": "b48338d6-e4d9-4fd9-9311-4413e8770cc3",
+      "name": "Generate Search URL"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={\"linkedin_profile_information\": {first_name: {{ $json.first_name }}, last_name: {{ $json.last_name }}, title: {{ $json.title }}, headline: {{ $json.headline }}, organization_name: {{ $json.organization_name }}, previous_company: {{ $json.employment_history?.[1]?.organization_name ?? \"\" }}, previous_title: {{ $json.employment_history[1].title }}}}",
+        "hasOutputParser": true,
+        "messages": {
+          "messageValues": [
+            {
+              "message": "You are a helpful, intelligent writing Assistant"
+            },
+            {
+              "type": "HumanMessagePromptTemplate",
+              "message": "Your task is to take as input a bunch of Linkedin profile information of a user, and then generate a very short, very punchy icebreaker that i can use as a variable in my connection request.\nReturn your results in this format:\n{\"icebreaker\": 'icebreaker goes here\"}\nIn order to ensure icebreakers are punchy and high-quality, make them follow this template:\nHey/Hi/Hello/other simple first greeting {{name}}, loved seeing {{thingAboutThem}}, i'm also into {{plausibleTieIn}}, though i'd connect/any other cool connection meant message.\nFor {{thingAboutThem}} and {{plausibleTieIn}} , never use the exact information provided in a LinkedIn profile information. This makes it seem human written, instead of just an automated message. Also, make it super short. Be extremely laconic and spartan."
+            }
+          ]
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.6,
+      "position": [
+        1040,
+        0
+      ],
+      "id": "bc981e5c-eb62-46b2-aa0d-394bbcbb89ea",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        140
+      ],
+      "id": "4a907c5a-3f1a-4742-9623-a05c62641393",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "A5i26b8hwDUBhzbe",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n\t\"type\": \"object\",\n\t\"properties\": {\n\t\t\"icebreaker\": {\n\t\t\t\"type\": \"string\"\n\t\t}\n\t}\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.2,
+      "position": [
+        1200,
+        140
+      ],
+      "id": "1459a3a1-f43c-4fd1-a62a-a7a9b8b67c81",
+      "name": "Structured Output Parser1"
+    },
+    {
+      "parameters": {
+        "maxItems": 3
+      },
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        840,
+        0
+      ],
+      "id": "3d2f82bb-f163-45da-8f39-3fc08f08cb5e",
+      "name": "Limit"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.phantombuster.com/api/v2/agents/launch",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "content-type",
+              "value": "application/json"
+            },
+            {
+              "name": "X-Phantombuster-Key",
+              "value": "xxx"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "id",
+              "value": "8206723600271561"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1840,
+        0
+      ],
+      "id": "a9fc009e-ff1f-48d3-bbae-4921ba48aa30",
+      "name": "Phantombuster Outreach Launcher"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1zcPu-aEz1-mEzmKvlIfYCJ8m4CKXmkassdbpOulrMJ8",
+          "mode": "list",
+          "cachedResultName": "linkedin outreach",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1zcPu-aEz1-mEzmKvlIfYCJ8m4CKXmkassdbpOulrMJ8/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1zcPu-aEz1-mEzmKvlIfYCJ8m4CKXmkassdbpOulrMJ8/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $('Limit').item.json.id }}",
+            "first_name": "={{ $('Limit').item.json.first_name }}",
+            "title": "={{ $('Limit').item.json.title }}",
+            "last_name": "={{ $('Limit').item.json.last_name }}",
+            "headline": "={{ $('Limit').item.json.headline }}",
+            "linkedin_url": "={{ $('Limit').item.json.linkedin_url }}",
+            "organization_name": "={{ $('Limit').item.json.organization_name }}",
+            "email_status": "={{ $('Limit').item.json.email_status }}",
+            "icebreaker": "={{ $json.output.icebreaker }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "first_name",
+              "displayName": "first_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "last_name",
+              "displayName": "last_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "title",
+              "displayName": "title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "headline",
+              "displayName": "headline",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "organization_name",
+              "displayName": "organization_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "linkedin_url",
+              "displayName": "linkedin_url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "email_status",
+              "displayName": "email_status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "icebreaker",
+              "displayName": "icebreaker",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "useAppend": true
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        1400,
+        0
+      ],
+      "id": "7c427f34-2b99-4456-9e50-ef73495c365d",
+      "name": "Add Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Jw90fVh4qDNGooIr",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        1620,
+        0
+      ],
+      "id": "1b4cc3e3-6b9e-4a98-a56b-42daf8d741b0",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "url": "https://api.phantombuster.com/api/v2/agents/fetch-output",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "id",
+              "value": "8206723600271561"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Phantombuster-Key",
+              "value": "xxx"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2060,
+        0
+      ],
+      "id": "a92ecd6f-3922-42c9-8917-d1172f509d01",
+      "name": "Fetch Phantom Data"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.output.split(\"JSON saved at \")[1].split('\\n')[0] }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {}
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2280,
+        0
+      ],
+      "id": "b5553fcb-25c2-46f1-a37b-02906c8d99b4",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1zcPu-aEz1-mEzmKvlIfYCJ8m4CKXmkassdbpOulrMJ8",
+          "mode": "list",
+          "cachedResultName": "linkedin outreach",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1zcPu-aEz1-mEzmKvlIfYCJ8m4CKXmkassdbpOulrMJ8/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1zcPu-aEz1-mEzmKvlIfYCJ8m4CKXmkassdbpOulrMJ8/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "connectionDegree": "={{ $json.connectionDegree }}",
+            "timestamp": "={{ $json.timestamp }}",
+            "inviterName": "={{ $json.inviterName }}",
+            "id": "={{ $json.id }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "first_name",
+              "displayName": "first_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "last_name",
+              "displayName": "last_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "title",
+              "displayName": "title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "headline",
+              "displayName": "headline",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "organization_name",
+              "displayName": "organization_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "linkedin_url",
+              "displayName": "linkedin_url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "email_status",
+              "displayName": "email_status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "icebreaker",
+              "displayName": "icebreaker",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "connectionDegree",
+              "displayName": "connectionDegree",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "timestamp",
+              "displayName": "timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "inviterName",
+              "displayName": "inviterName",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "useAppend": true
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        2500,
+        0
+      ],
+      "id": "ecb9150c-edb2-4e4f-90bb-86357a1f74e4",
+      "name": "Phantom AWS result to sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Jw90fVh4qDNGooIr",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Generate Search URL",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Generate Search URL",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Generate Search URL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Search URL": {
+      "main": [
+        [
+          {
+            "node": "Run APIFY actor and Get Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Run APIFY actor and Get Result": {
+      "main": [
+        [
+          {
+            "node": "Limit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser1": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "Add Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add Google Sheets": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "Phantombuster Outreach Launcher",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Phantombuster Outreach Launcher": {
+      "main": [
+        [
+          {
+            "node": "Fetch Phantom Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Phantom Data": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Phantom AWS result to sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Phantom AWS result to sheets": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "54189072-6e2e-40ef-9de9-7fef8f01816b",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e15e295de39124dfa3dae9c7582f0d6f1394ebc90aa823a78d70f84a8c0c54c5"
+  },
+  "id": "UPgL2MlLTfa7yx4s",
+  "tags": []
+}

@@ -1,0 +1,116 @@
+{
+  "name": "Google Doc creator",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "13521f71-23dd-4cad-8f5f-6bad3cbd26ed",
+        "authentication": "headerAuth",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "b51697fd-1338-4f20-9c1f-dad21fe84b5e",
+      "name": "Webhook",
+      "webhookId": "13521f71-23dd-4cad-8f5f-6bad3cbd26ed",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "ynkmJ9plEjfCvcKo",
+          "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        440,
+        0
+      ],
+      "id": "92d570cb-5597-426f-98d5-47617f4646b3",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "operation": "createFromText",
+        "content": "={{$json.body.document_text}}",
+        "name": "={{$json.body.document_title}}",
+        "driveId": {
+          "__rl": true,
+          "value": "My Drive",
+          "mode": "list",
+          "cachedResultName": "My Drive",
+          "cachedResultUrl": "https://drive.google.com/drive/my-drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "1VXvtkB4QcDCe4Q-pAQHhYydDHLItnjbM",
+          "mode": "list",
+          "cachedResultName": "n8n",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/1VXvtkB4QcDCe4Q-pAQHhYydDHLItnjbM"
+        },
+        "options": {
+          "convertToGoogleDocument": true
+        }
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        220,
+        0
+      ],
+      "id": "09bcc9ef-39e7-4e42-ad25-bd0f30abc5ed",
+      "name": "Google Drive",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "O8aObwgwRpWIoBRJ",
+          "name": "Google Drive account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Google Drive",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Drive": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "377acfb1-abc7-4f97-95a4-88cd170c3194",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e15e295de39124dfa3dae9c7582f0d6f1394ebc90aa823a78d70f84a8c0c54c5"
+  },
+  "id": "N5XSDH4DWXxysJdC",
+  "tags": []
+}
