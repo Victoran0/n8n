@@ -1,0 +1,1653 @@
+{
+  "name": "Hiring and Recruiting",
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "appQM6aJVULEVujzk",
+          "mode": "id"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblDPGTpMvxFZwQKk",
+          "mode": "id"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Full Name": "={{ $('Typeform Form Submitted').item.json['First name'] }} {{ $('Typeform Form Submitted').item.json['Last name'] }}",
+            "First Name": "={{ $('Typeform Form Submitted').item.json['First name'] }}",
+            "Last Name": "={{ $('Typeform Form Submitted').item.json['Last name'] }}",
+            "Status": "Shortlisted",
+            "Phone Number": "={{ $('Typeform Form Submitted').item.json['Phone number'] }}",
+            "Email": "={{ $('Typeform Form Submitted').item.json.Email }}",
+            "Portfolio": "={{ $('Typeform Form Submitted').item.json['Portfolio or Writing Samples'] }}",
+            "Years of Experience": "={{ $json.experience }}",
+            "Copywriting Skills": "={{ $json.copywritingSkills }}",
+            "Why Join GrowthHive": "={{ $('Typeform Form Submitted').item.json['Why Do You Want to Join GrowthHive Marketing?'] }}",
+            "Expected Salary": "={{ $('Typeform Form Submitted').item.json['Expected Monthly Salary'] }}",
+            "Mail Status": "Not Sent"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Full Name",
+              "displayName": "Full Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "First Name",
+              "displayName": "First Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Last Name",
+              "displayName": "Last Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Shortlisted",
+                  "value": "Shortlisted"
+                },
+                {
+                  "name": "Invited for Interview",
+                  "value": "Invited for Interview"
+                },
+                {
+                  "name": "Interviewed",
+                  "value": "Interviewed"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Phone Number",
+              "displayName": "Phone Number",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Portfolio",
+              "displayName": "Portfolio",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Years of Experience",
+              "displayName": "Years of Experience",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Copywriting Skills",
+              "displayName": "Copywriting Skills",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Why Join GrowthHive",
+              "displayName": "Why Join GrowthHive",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Expected Salary",
+              "displayName": "Expected Salary",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Last Modified",
+              "displayName": "Last Modified",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Mail Status",
+              "displayName": "Mail Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Sent",
+                  "value": "Sent"
+                },
+                {
+                  "name": "Not Sent",
+                  "value": "Not Sent"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        -60,
+        0
+      ],
+      "id": "86d72b28-3027-4290-a1d4-c5ecf903e91b",
+      "name": "Append to Shortlisted",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "G9ogSyahp0njsBI2",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "mode": "id",
+          "value": "appQM6aJVULEVujzk"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbljiNafFvQVAzKX7",
+          "mode": "id"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Years of Experience": "={{ $json.experience }}",
+            "Full Name": "={{ $('Typeform Form Submitted').item.json['First name'] }} {{ $('Typeform Form Submitted').item.json['Last name'] }}",
+            "First Name": "={{ $('Typeform Form Submitted').item.json['First name'] }}",
+            "Last Name": "={{ $('Typeform Form Submitted').item.json['Last name'] }}",
+            "Status": "Not Qualified",
+            "Phone Number": "={{ $('Typeform Form Submitted').item.json['Phone number'] }}",
+            "Email": "={{ $('Typeform Form Submitted').item.json.Email }}",
+            "Copywriting Skills": "={{ $json.copywritingSkills }}",
+            "Why Join GrowthHive": "={{ $('Typeform Form Submitted').item.json['Why Do You Want to Join GrowthHive Marketing?'] }}",
+            "Expected Salary": "={{ $('Typeform Form Submitted').item.json['Expected Monthly Salary'] }}",
+            "Mail Status": "Not Sent"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Full Name",
+              "displayName": "Full Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "First Name",
+              "displayName": "First Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Last Name",
+              "displayName": "Last Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Not Qualified",
+                  "value": "Not Qualified"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Phone Number",
+              "displayName": "Phone Number",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Years of Experience",
+              "displayName": "Years of Experience",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Copywriting Skills",
+              "displayName": "Copywriting Skills",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Why Join GrowthHive",
+              "displayName": "Why Join GrowthHive",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Expected Salary",
+              "displayName": "Expected Salary",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Last Modified",
+              "displayName": "Last Modified",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Mail Status",
+              "displayName": "Mail Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Sent",
+                  "value": "Sent"
+                },
+                {
+                  "name": "Not Sent",
+                  "value": "Not Sent"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        -60,
+        200
+      ],
+      "id": "794f9efb-405f-4914-a988-6d91f148cd2f",
+      "name": "Append to Not Qualified",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "G9ogSyahp0njsBI2",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "// const first_name = \nreturn {\n  \"email_subject\": \"You're Invited to the Next Stage of Our Hiring Process!\",\n  \"email_body\": `<p>Hi $json.fields.Email,</p> <p>We are thrilled to inform you that you've been shortlisted for the next stage of our recruitment process!</p> <p>To proceed, please schedule your interview at a time that works best for you:</p> <p><a href='https://calendly.com/victoranosunkvic' target='_blank'>Book Your Interview Slot</a></p> <p>We look forward to speaking with you soon!</p> <p>Best regards,<br>The Recruitment Team</p>`\n}\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -300,
+        440
+      ],
+      "id": "a5d67b71-24a5-4229-a6ea-ef78ffe5f806",
+      "name": "Interview Email Message"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "return {\n  \"email_subject\": \"Welcome Aboard! Your Next Steps at Our Company\",\n  \"email_body\": `<p>Hi ${$json.fields['First Name']},</p> \n  <p>We are thrilled to inform you that you have been selected for the role! Welcome to the team!</p>\n                 <p>To get started, please review the onboarding documents and complete the necessary steps before your first day:</p>\n                 <p><a href='https://example.com/welcome' target='_blank'>Access Your Onboarding Documents</a></p>\n                 <p>We are excited to see you thrive in your new role and are here to support you every step of the way.</p>\n                 <p>Best regards,<br>The Recruitment Team</p>`\n}\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -300,
+        640
+      ],
+      "id": "c2543c30-2e7b-423c-862b-00ce2575c97a",
+      "name": "Hired Email Message"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "return {\n  \"email_subject\": \"Thank You for Your Time and Interest\",\n  \"email_body\": `Dear ${ $json.fields['First Name'] },\\n\\nThank you for taking the time to interview with us. We truly appreciate your interest in the role and the effort you put into the process.\\n\\nAfter careful consideration, we have decided to move forward with another candidate. However, we were genuinely impressed by your qualifications, and we would like to keep your application on file for potential future opportunities.\\n\\nWe wish you the very best in your job search and hope to cross paths again in the future.\\n\\nBest regards,\\nThe Recruitment Team`\n}\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -380,
+        900
+      ],
+      "id": "9111440d-9fab-4db6-bd9c-9000372b04fc",
+      "name": "Rejection Email Message"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Route based on the Change').item.json.fields.Email }}",
+        "subject": "={{ $json.email_subject }}",
+        "message": "={{ $json.email_body }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        -100,
+        440
+      ],
+      "id": "ee024387-bbf0-4110-8255-67bc758e00d0",
+      "name": "Send Interview Email",
+      "webhookId": "7c6ada36-b650-41e0-9b11-da20fc3091e5",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "JbGelF1uFJ0HFTDg",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Route based on the Change').item.json.fields.Email }}",
+        "subject": "={{ $json.email_subject }}",
+        "message": "={{ $json.email_body }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        -100,
+        640
+      ],
+      "id": "db3b48b3-0657-4071-9a29-c701166ebc02",
+      "name": "Send Hire Email",
+      "webhookId": "7c6ada36-b650-41e0-9b11-da20fc3091e5",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "JbGelF1uFJ0HFTDg",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Route based on the Change').item.json.fields.Email }}",
+        "subject": "={{ $json.email_subject }}",
+        "emailType": "text",
+        "message": "={{ $json.email_body }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        -220,
+        840
+      ],
+      "id": "7bcac35c-ec09-452d-b284-3d52f0634ce3",
+      "name": "Send Rejection Email",
+      "webhookId": "7c6ada36-b650-41e0-9b11-da20fc3091e5",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "JbGelF1uFJ0HFTDg",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "appQM6aJVULEVujzk",
+          "mode": "id"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblDPGTpMvxFZwQKk",
+          "mode": "id"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $('Route based on the Change').item.json.id }}",
+            "Mail Status": "Interview Mail Sent"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "Full Name",
+              "displayName": "Full Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "First Name",
+              "displayName": "First Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Last Name",
+              "displayName": "Last Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Shortlisted",
+                  "value": "Shortlisted"
+                },
+                {
+                  "name": "Invite for Interview",
+                  "value": "Invite for Interview"
+                },
+                {
+                  "name": "Interviewed",
+                  "value": "Interviewed"
+                }
+              ],
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Phone Number",
+              "displayName": "Phone Number",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Portfolio",
+              "displayName": "Portfolio",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Years of Experience",
+              "displayName": "Years of Experience",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Copywriting Skills",
+              "displayName": "Copywriting Skills",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Why Join GrowthHive",
+              "displayName": "Why Join GrowthHive",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Expected Salary",
+              "displayName": "Expected Salary",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Last Modified",
+              "displayName": "Last Modified",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Mail Status",
+              "displayName": "Mail Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Not Sent",
+                  "value": "Not Sent"
+                },
+                {
+                  "name": "Interview Mail Sent",
+                  "value": "Interview Mail Sent"
+                },
+                {
+                  "name": "Hired Mail Sent",
+                  "value": "Hired Mail Sent"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        100,
+        440
+      ],
+      "id": "62f65a93-1d4a-4821-99e2-240453f7153c",
+      "name": "Update Mail Status to \"Interview Mail Sent\"",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "G9ogSyahp0njsBI2",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "appQM6aJVULEVujzk",
+          "mode": "id"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblDPGTpMvxFZwQKk",
+          "mode": "id"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $('Route based on the Change').item.json.id }}",
+            "Mail Status": "Hired Mail Sent"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "Full Name",
+              "displayName": "Full Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "First Name",
+              "displayName": "First Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Last Name",
+              "displayName": "Last Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Shortlisted",
+                  "value": "Shortlisted"
+                },
+                {
+                  "name": "Invite for Interview",
+                  "value": "Invite for Interview"
+                },
+                {
+                  "name": "Interviewed",
+                  "value": "Interviewed"
+                }
+              ],
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Phone Number",
+              "displayName": "Phone Number",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Portfolio",
+              "displayName": "Portfolio",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Years of Experience",
+              "displayName": "Years of Experience",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Copywriting Skills",
+              "displayName": "Copywriting Skills",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Why Join GrowthHive",
+              "displayName": "Why Join GrowthHive",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Expected Salary",
+              "displayName": "Expected Salary",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Last Modified",
+              "displayName": "Last Modified",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Mail Status",
+              "displayName": "Mail Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Not Sent",
+                  "value": "Not Sent"
+                },
+                {
+                  "name": "Interview Mail Sent",
+                  "value": "Interview Mail Sent"
+                },
+                {
+                  "name": "Hired Mail Sent",
+                  "value": "Hired Mail Sent"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        100,
+        640
+      ],
+      "id": "cb8c283f-8a32-47de-bbbc-2e2e8f8eadc2",
+      "name": "Update Mail Status to \"Hired Mail Sent\"",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "G9ogSyahp0njsBI2",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "appQM6aJVULEVujzk",
+          "mode": "id"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblNnWqO8770ybZbh",
+          "mode": "id"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Full Name": "={{ $('Route based on the Change').item.json.fields['Full Name'] }}",
+            "First Name": "={{ $('Route based on the Change').item.json.fields['First Name'] }}",
+            "Last Name": "={{ $('Route based on the Change').item.json.fields['Last Name'] }}",
+            "Status": "Not Fit",
+            "Phone Number": "={{ $('Route based on the Change').item.json.fields['Phone Number'] }}",
+            "Email": "={{ $('Route based on the Change').item.json.fields.Email }}",
+            "Portfolio": "={{ $('Route based on the Change').item.json.fields.Portfolio }}",
+            "Years of Experience": "={{ $('Route based on the Change').item.json.fields['Years of Experience'] }}",
+            "Copywriting Skills": "={{ $('Route based on the Change').item.json.fields['Copywriting Skills'] }}",
+            "Why Join GrowthHive": "={{ $('Route based on the Change').item.json.fields['Why Join GrowthHive'] }}",
+            "Expected Salary": "={{ $('Route based on the Change').item.json.fields['Expected Salary'] }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Full Name",
+              "displayName": "Full Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "First Name",
+              "displayName": "First Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Last Name",
+              "displayName": "Last Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Not Fit",
+                  "value": "Not Fit"
+                },
+                {
+                  "name": "",
+                  "value": ""
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Phone Number",
+              "displayName": "Phone Number",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Portfolio",
+              "displayName": "Portfolio",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Years of Experience",
+              "displayName": "Years of Experience",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Copywriting Skills",
+              "displayName": "Copywriting Skills",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Why Join GrowthHive",
+              "displayName": "Why Join GrowthHive",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Expected Salary",
+              "displayName": "Expected Salary",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Last Modified",
+              "displayName": "Last Modified",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        -60,
+        920
+      ],
+      "id": "f58bd8a4-8582-4557-998e-8555dd585b99",
+      "name": "Append To Candidate Pool",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "G9ogSyahp0njsBI2",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "deleteRecord",
+        "base": {
+          "__rl": true,
+          "value": "appQM6aJVULEVujzk",
+          "mode": "id"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblDPGTpMvxFZwQKk",
+          "mode": "id"
+        },
+        "id": "={{ $('Route based on the Change').item.json.id }}"
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        120,
+        840
+      ],
+      "id": "a80f6921-c7c8-4976-8341-90d749741e52",
+      "name": "Delete from Shortlisted Table",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "G9ogSyahp0njsBI2",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "authentication": "airtableTokenApi",
+        "baseId": {
+          "__rl": true,
+          "value": "appQM6aJVULEVujzk",
+          "mode": "id"
+        },
+        "tableId": {
+          "__rl": true,
+          "value": "tblDPGTpMvxFZwQKk",
+          "mode": "id"
+        },
+        "triggerField": "Status",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.airtableTrigger",
+      "typeVersion": 1,
+      "position": [
+        -760,
+        640
+      ],
+      "id": "e0662561-c82c-4ec5-838f-7acb46a97264",
+      "name": "Fetch when Candidate Status Change",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "G9ogSyahp0njsBI2",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.fields.Status }}",
+                    "rightValue": "Invite for Interview",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "a8185434-d90d-44f9-85c0-6a03ce16a30b"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Invite for Interview"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "2ec529b0-9bf9-4c5f-9d78-edd3b94715f2",
+                    "leftValue": "={{ $json.fields.Status }}",
+                    "rightValue": "Hired",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Hired"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "4840198f-4722-4667-9752-6308bd291721",
+                    "leftValue": "={{ $json.fields.Status }}",
+                    "rightValue": "Rejected",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Rejected"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -560,
+        640
+      ],
+      "id": "8619c822-e5ad-4691-859e-f4e16cdeacbe",
+      "name": "Route based on the Change"
+    },
+    {
+      "parameters": {
+        "formId": "frvW93nQ"
+      },
+      "type": "n8n-nodes-base.typeformTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -700,
+        100
+      ],
+      "id": "b65078d7-b1cb-4b9f-9496-2227eb75c8d3",
+      "name": "Typeform Form Submitted",
+      "webhookId": "cf2ae466-b262-43c9-9442-65a50e98dad6"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "// Extract the \"Years of Experience\" field value\nconst experienceText = $json['Years of Experience in Copywriting'];\n// Use regex to extract the first number (e.g., \"3\" from \"3–5 years\")\nconst experience = parseInt(experienceText.match(/\\d+/)?.[0]) || 0;\n\n// Extract \"Copywriting Skills\" and convert to a readable string\nconst copywritingSkillsArray = $json['Copywriting Skills'] || [];\nconst copywritingSkills = copywritingSkillsArray.join(', ');\n\n// Add the \"Status\" field with the value \"Applied\"\nconst status = (experience > 0 && copywritingSkillsArray.length > 0) ? \"Shortlisted\" : \"Not Qualified\";\n\n// Return the combined data including the new \"Status\" field\nreturn { \n    experience, \n    copywritingSkills, \n    status \n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -480,
+        100
+      ],
+      "id": "a40aba18-2666-4d84-8eb3-a3363bb3ffed",
+      "name": "Restructure some Fields"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "ce279454-249e-4e9a-8ebf-d45ca8925e8a",
+              "leftValue": "={{ $json.experience }}",
+              "rightValue": 1,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            },
+            {
+              "id": "26b1b962-0f02-4440-a540-edd9957879d3",
+              "leftValue": "={{ $('Typeform Form Submitted').item.json[\"Portfolio or Writing Samples\"] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -260,
+        100
+      ],
+      "id": "cad91e20-6861-4f37-937c-bfd2761def3e",
+      "name": "If Candidate is Experienced"
+    }
+  ],
+  "pinData": {
+    "Send Interview Email": [
+      {
+        "json": {
+          "id": "19687e93c74db823",
+          "threadId": "19687e93c74db823",
+          "labelIds": [
+            "SENT"
+          ]
+        }
+      }
+    ],
+    "Send Rejection Email": [
+      {
+        "json": {
+          "id": "196893c92867e60b",
+          "threadId": "196893c92867e60b",
+          "labelIds": [
+            "SENT"
+          ]
+        }
+      }
+    ],
+    "Fetch when Candidate Status Change": [
+      {
+        "json": {
+          "id": "rectcO0BfSEYZqLJO",
+          "createdTime": "2025-04-30T16:57:26.000Z",
+          "fields": {
+            "Full Name": "Ella Reyes",
+            "First Name": "Ella",
+            "Last Name": "Reyes",
+            "Status": "Rejected",
+            "Phone Number": "+2348104643215",
+            "Email": "0reyes0s0ricc@gmail.com",
+            "Years of Experience": 3,
+            "Copywriting Skills": "Sales Pages, Blog Writing, Ad Copy",
+            "Why Join GrowthHive": "because i love you so much so i do not need to unfuck you for now",
+            "Expected Salary": "2000",
+            "Last Modified": "2025-04-30T20:27:15.000Z",
+            "Mail Status": "Hired Mail Sent",
+            "Portfolio": "they are much, see one here"
+          }
+        }
+      }
+    ],
+    "Typeform Form Submitted": [
+      {
+        "json": {
+          "First name": "Ella",
+          "Last name": "Reyes",
+          "Phone number": "+2348104643215",
+          "Email": "0reyes0s0ricc@gmail.com",
+          "Years of Experience in Copywriting": "3-5 years",
+          "Portfolio or Writing Samples": "they are much, see one here",
+          "Have You Worked with Marketing Agencies Before?": true,
+          "Copywriting Skills": [
+            "Sales Pages",
+            "Blog Writing",
+            "Ad Copy"
+          ],
+          "Why Do You Want to Join GrowthHive Marketing?": "because i love you so much so i do not need to unfuck you for now",
+          "Availability": "Immediately",
+          "Expected Monthly Salary": "2000",
+          "Additional Information": "I love you"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Interview Email Message": {
+      "main": [
+        [
+          {
+            "node": "Send Interview Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Hired Email Message": {
+      "main": [
+        [
+          {
+            "node": "Send Hire Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Rejection Email Message": {
+      "main": [
+        [
+          {
+            "node": "Send Rejection Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Interview Email": {
+      "main": [
+        [
+          {
+            "node": "Update Mail Status to \"Interview Mail Sent\"",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Hire Email": {
+      "main": [
+        [
+          {
+            "node": "Update Mail Status to \"Hired Mail Sent\"",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Mail Status to \"Interview Mail Sent\"": {
+      "main": [
+        []
+      ]
+    },
+    "Send Rejection Email": {
+      "main": [
+        [
+          {
+            "node": "Append To Candidate Pool",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append To Candidate Pool": {
+      "main": [
+        [
+          {
+            "node": "Delete from Shortlisted Table",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch when Candidate Status Change": {
+      "main": [
+        [
+          {
+            "node": "Route based on the Change",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route based on the Change": {
+      "main": [
+        [
+          {
+            "node": "Interview Email Message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Hired Email Message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Rejection Email Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Typeform Form Submitted": {
+      "main": [
+        [
+          {
+            "node": "Restructure some Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Restructure some Fields": {
+      "main": [
+        [
+          {
+            "node": "If Candidate is Experienced",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Candidate is Experienced": {
+      "main": [
+        [
+          {
+            "node": "Append to Shortlisted",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Append to Not Qualified",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "116aa4ea-49ca-4e32-98d8-bd4c1a060815",
+  "meta": {
+    "instanceId": "6878df10eed86aa917655349a561420b6d821e91bf99855ccb7865468926856a"
+  },
+  "id": "LwKB8LJ5zWwnNUJ3",
+  "tags": []
+}
