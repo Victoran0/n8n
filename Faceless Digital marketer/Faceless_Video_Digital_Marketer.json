@@ -1,0 +1,210 @@
+{
+  "name": "Faceless Video Digital Marketer",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "f28b2a9a-08aa-40ca-bf77-23831c2c88e5",
+      "name": "Telegram Trigger",
+      "webhookId": "cd906a19-a79d-4809-b8d2-e70842f728c1",
+      "credentials": {
+        "telegramApi": {
+          "id": "pxFRu3Zjgw6oTtQ9",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const input = $json.message.text\n// Remove optional \"generate video\" prefix\nconst cleaned = input.replace(/^generate video[:]?/i, '').trim();\n// Split by comma\nconst parts = cleaned.split(',').map(p => p.trim());\n// Assign whatever's there, even if broken or missing\nconst videoPrompt = parts[0] || \"\";\nconst captionIdea = parts[1] || \"\";\nconst musicStyle = parts[2] || \"\";\nreturn {\n  json: {\n    videoPrompt,\n    captionIdea,\n    musicStyle\n  }\n}\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        200,
+        0
+      ],
+      "id": "0512eeef-15ca-40d0-b9b3-047823bd94bc",
+      "name": "Get Video Data from TG Msg"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.9,
+      "position": [
+        860,
+        220
+      ],
+      "id": "b5df1dfa-b152-4e2a-8df5-c1807f16a432",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash-001",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        500,
+        140
+      ],
+      "id": "7a48aa0b-1c6a-4ad4-bbce-de3caf8776a0",
+      "name": "LLM",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "VtOR6oqzObEdheRD",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.videoPrompt }}",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "You are a prompt—writing assistant for the text to video ai generator Kling AI.\n\nYour Task:\nYour job is to take a short input from the user and turn it into a effective video generation prompt filled with declamatory interesting plots and atmosphere description. It is designed for Kling AI.\nAfter generating the image prompt, you will return only the final prompt, without explanations or extra text.\n\nFollow this formatting and tone guide based on these examples:\n1. A dog playing in the yard\nA golden retriever chases a blue frisbee across a green backyard. Garden tools lean against a red brick wall. White butterflies flutter near purple flowers. The dog jumps and catches the frisbee mid air. Sunlight filters through maple tree branches above.\n2. Coffee Mug\nWhite ceramic coffee mug on glossy marble countertop with morning window light. Camera slowly rotates 360 degrees around the mug, pausing briefly at the handle.\n3.The vibrant street Performer\nA lively street performer in her early 30s captivates a small crowd in a bustling city square. She has vibrant teal hair in a messy updo, bright green eyes, and a contagious smile. Her face is adorned with intricate, shimmering face paint in swirling patterns. She's wearing a colorful, patchwork dress and is mid-motion, juggling three flaming torches. The background is slightly blurred, showing impressed onlookers and the warm glow of street lamps at dusk.\n\nBuilding Your Prompt Step-By-Step\nStart with your main subject. Be exact about what you want to show. Instead of \"a person,\" write \"a young professional in a blue suit.\"\nNext, describe the exact setting. Your background matters as much as your subject. Write \"inside a modern office with windows and minimalist furniture\" instead of just \"in an office. \"\nAdd specific lighting details. Tell the AI exactly how light hits your scene. For example, write \"morning sunlight streams through windows, creating soft shadows on the floor\" or \"overhead spotlights cast sharp circles on the surface.\"\nInclude clear movement instructions. The camera should move with purpose. For example,\n\"The view starts at ground level, rises smoothly to 1O feet, then tracks left to show the full scene.\"\n\n*Rules:\nDo NOT include any introductory or closing remarks. Just the video prompt."
+            }
+          ]
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.6,
+      "position": [
+        400,
+        0
+      ],
+      "id": "d1634338-c12e-4a33-aca7-b69bcf0794cb",
+      "name": "Create Prompt from Vid Data"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "function generateRandomCode() {\n  const alphabets = \"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz\"\n  const  id = `${alphabets[Math.floor(Math.random() * 52)]}${alphabets[Math.floor(Math.random() * 52)]}${new Date().getTime()}${alphabets[Math.floor(Math.random() * 52)]}${alphabets[Math.floor(Math.random() * 52)]}`\n  return id\n}\nreturn {\n  json: {\n    code: generateRandomCode()\n  }\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        760,
+        0
+      ],
+      "id": "1e84ed35-e532-439f-89f5-ee17258477d2",
+      "name": "Generate Video ID"
+    }
+  ],
+  "pinData": {
+    "Telegram Trigger": [
+      {
+        "json": {
+          "update_id": 179092850,
+          "message": {
+            "message_id": 18,
+            "from": {
+              "id": 6034332244,
+              "is_bot": false,
+              "first_name": "Kent’s",
+              "username": "kents888",
+              "language_code": "en"
+            },
+            "chat": {
+              "id": 6034332244,
+              "first_name": "Kent’s",
+              "username": "kents888",
+              "type": "private"
+            },
+            "date": 1746069751,
+            "text": "generate video of a man running across a mountain ridge in the winter with camera positon in areal view, a quick tip for trail runners in winter"
+          }
+        }
+      }
+    ],
+    "Get Video Data from TG Msg": [
+      {
+        "json": {
+          "videoPrompt": "a man running across a mountain ridge in the winter with camera positon in areal view",
+          "captionIdea": "a quick tip for trail runners in winter",
+          "musicStyle": ""
+        }
+      }
+    ],
+    "Create Prompt from Vid Data": [
+      {
+        "json": {
+          "text": "An athletic man in a thermal running suit sprints along a snow-covered mountain ridge. Patches of exposed rock are visible beneath the snow. He wears a backpack and running shoes. The sun is low on the horizon, casting long shadows. Vapor rises from his breath in the cold air. The camera is positioned high above, providing an expansive aerial view of the runner and the surrounding snow-capped peaks. The sky transitions from a pale orange to deep blue."
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get Video Data from TG Msg",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Video Data from TG Msg": {
+      "main": [
+        [
+          {
+            "node": "Create Prompt from Vid Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LLM": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Create Prompt from Vid Data",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Prompt from Vid Data": {
+      "main": [
+        [
+          {
+            "node": "Generate Video ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "383a7023-86a7-4059-a98d-9a31b8ba7c94",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "6878df10eed86aa917655349a561420b6d821e91bf99855ccb7865468926856a"
+  },
+  "id": "qZl9FIPzowFqlRLH",
+  "tags": []
+}
