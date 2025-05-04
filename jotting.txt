@@ -15,4 +15,6 @@ Hey/Hi/Hello/other simple first greeting {{name}}, loved seeing {{thingAboutThem
 For {{thingAboutThem}} and {{plausibleTieIn}} , never use the exact information provided in a LinkedIn profile information. This makes it seem human written, instead of just an automated message. Also, make it super short. Be extremely laconic and spartan.
 
 
-Personal assistant for to do list, email and manage calander, set up youtube api for video upload, set up instagram/tiktok api for trending contents download
+
+ set up youtube api for video upload, set up instagram/tiktok api for trending contents download
+
